@@ -1,0 +1,15 @@
+providers:
+  - RentalHub\StarterKit\RentalHubServiceProvider
+
+migrations:
+  - database/migrations
+
+workbench:
+  start: /rental/dashboard
+  install: true
+
+env:
+  - DB_CONNECTION=sqlite
+  - DB_DATABASE=/home/gani/library_laravel/database/database.sqlite
+  - CACHE_STORE=file
+  - SESSION_DRIVER=file
