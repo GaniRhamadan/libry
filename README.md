@@ -40,31 +40,71 @@
 
 ---
 
-## Panduan Instalasi Cepat
+## Panduan Instalasi di Komputer Lain (Plug & Play)
 
-### 1. Pasang Package via Composer
+Paket ini **100% Plug-and-Play**: tidak memerlukan instalasi Node.js/NPM, tidak perlu build aset frontend, dan langsung menyediakan antarmuka modern responsif berbasis Tailwind CSS & Alpine.js via CDN.
 
-Jalankan perintah berikut pada terminal proyek Laravel Anda:
+Pilih salah satu metode instalasi di bawah ini sesuai kebutuhan Anda:
 
-```bash
-composer require rental-hub/starter-kit
-```
+### Metode 1: Dipasang ke Proyek Laravel Baru / Proyek yang Sudah Ada (Standar)
 
-### 2. Jalankan Perintah Instalasi
+Gunakan cara ini jika Anda ingin mengintegrasikan sistem rental ke aplikasi Laravel Anda:
 
-Jalankan perintah artisan bawaan:
+1. **Buka terminal proyek Laravel Anda** (atau buat proyek baru jika belum ada):
+   ```bash
+   composer create-project laravel/laravel rental-app
+   cd rental-app
+   ```
 
-```bash
-php artisan rental:install
-```
+2. **Daftarkan repository GitHub library ini ke Composer**:
+   ```bash
+   composer config repositories.rental-hub vcs https://github.com/GaniRhamadan/libry.git
+   ```
 
-Perintah di atas secara otomatis akan:
-1. Mempublikasikan file konfigurasi `config/rental-hub.php`.
-2. Menjalankan seluruh file migrasi database paket.
-3. Membuat symlink penyimpanan file (`storage:link`) jika belum tersedia.
-4. Menyiapkan akun administrator (secara interaktif atau default).
-5. Membuat data demo berupa 1 kategori dan 3 unit armada (opsional).
-6. Menampilkan URL halaman login beserta kredensial administrator.
+3. **Unduh package**:
+   ```bash
+   composer require rental-hub/starter-kit:dev-main
+   ```
+
+4. **Jalankan installer otomatis**:
+   ```bash
+   php artisan rental:install
+   ```
+   *Installer otomatis mempublikasikan konfigurasi, menjalankan migrasi database dengan isolasi prefix `rental_`, membuat symlink storage, membuat akun admin, dan menyiapkan 3 unit kendaraan demo.*
+
+5. **Jalankan server aplikasi**:
+   ```bash
+   php artisan serve
+   ```
+   Buka browser di: **`http://127.0.0.1:8000/rental/login`**
+
+---
+
+### Metode 2: Clone Langsung Repositori Ini (Mode Mandiri / Standalone Demo)
+
+Gunakan cara ini jika rekan atau pengguna lain hanya ingin langsung mencoba/mendemokan library ini secara mandiri tanpa membuat proyek Laravel terpisah:
+
+1. **Clone repositori dari GitHub**:
+   ```bash
+   git clone https://github.com/GaniRhamadan/libry.git
+   cd libry
+   ```
+
+2. **Pasang dependensi PHP**:
+   ```bash
+   composer install
+   ```
+
+3. **Jalankan installer rental**:
+   ```bash
+   php artisan rental:install
+   ```
+
+4. **Nyalakan server**:
+   ```bash
+   php artisan serve
+   ```
+   Buka browser di: **`http://127.0.0.1:8000/rental/login`**
 
 ---
 
