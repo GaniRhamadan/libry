@@ -72,9 +72,16 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        $availableUnits = RentalUnit::available()
+            ->with('category')
+            ->latest()
+            ->limit(3)
+            ->get();
+
         return view('rental-hub::dashboard.customer', [
             'activeBookings' => $activeBookings,
             'recentHistory' => $recentHistory,
+            'availableUnits' => $availableUnits,
         ]);
     }
 }

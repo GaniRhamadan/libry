@@ -65,8 +65,14 @@ class BookingController extends Controller
         ]);
     }
 
-    public function create(Request $request): View
+    public function create(Request $request): View|RedirectResponse
     {
+        $user = $request->user();
+        if (($user->rental_role ?? 'customer') === UserRole::ADMIN->value) {
+            return redirect()->route('rental.bookings.index')
+                ->with('error', 'Akun Administrator bertugas mengelola permohonan sewa dan unit armada. Pemesanan mandiri hanya untuk akun Pelanggan/Penyewa.');
+        }
+
         $selectedUnitId = $request->query('unit_id') ? (int) $request->query('unit_id') : null;
         $availableUnits = RentalUnit::available()->with('category')->orderBy('name')->get();
 
@@ -78,7 +84,13 @@ class BookingController extends Controller
 
     public function store(BookingRequest $request, BookingService $bookingService): RedirectResponse
     {
-        $userId = (int) $request->user()->getAuthIdentifier();
+        $user = $request->user();
+        if (($user->rental_role ?? 'customer') === UserRole::ADMIN->value) {
+            return redirect()->route('rental.bookings.index')
+                ->with('error', 'Akun Administrator tidak dapat mengajukan booking sewa mandiri.');
+        }
+
+        $userId = (int) $user->getAuthIdentifier();
         $booking = $bookingService->createBooking($request->validated(), $userId);
 
         return redirect()->route('rental.bookings.show', $booking)->with(

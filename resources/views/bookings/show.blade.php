@@ -29,6 +29,63 @@
         </div>
     </div>
 
+    <!-- Customer / Admin Status Guidance Banner -->
+    @php
+        $isAdmin = (auth()->user()->rental_role ?? 'customer') === 'admin';
+    @endphp
+
+    @if (!$isAdmin)
+        <div class="rounded-2xl border p-5 sm:p-6 {{ $booking->status->badgeClass() }} bg-opacity-10">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5">
+                    @if ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::PENDING)
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::APPROVED)
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::ACTIVE)
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::RETURNED)
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                    @else
+                        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    @endif
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900">
+                        @if ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::PENDING)
+                            Permohonan Sewa Sedang Menunggu Persetujuan
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::APPROVED)
+                            Sewa Disetujui — Siap Pengambilan Kunci
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::ACTIVE)
+                            Masa Sewa Sedang Berjalan
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::RETURNED)
+                            Sewa Telah Selesai
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::REJECTED)
+                            Permohonan Sewa Ditolak
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::CANCELLED)
+                            Reservasi Dibatalkan
+                        @endif
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                        @if ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::PENDING)
+                            Permohonan sewa Anda sedang menunggu verifikasi oleh pihak admin rental. Anda dapat membatalkan pesanan ini jika ada perubahan jadwal.
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::APPROVED)
+                            Selamat! Permohonan Anda disetujui. Silakan datang ke kantor rental pada jadwal pengambilan dengan membawa kartu identitas (KTP/SIM) untuk serah terima armada.
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::ACTIVE)
+                            Armada saat ini berada dalam penggunaan Anda. Mohon menjaga kondisi armada dan mengembalikannya sebelum batas waktu untuk menghindari denda keterlambatan.
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::RETURNED)
+                            Armada telah berhasil dikembalikan dalam kondisi baik. Terima kasih telah mempercayakan perjalanan Anda kepada kami!
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::REJECTED)
+                            Mohon maaf, permohonan sewa tidak dapat diproses oleh pengelola rental.
+                        @elseif ($booking->status === \RentalHub\StarterKit\Enums\BookingStatus::CANCELLED)
+                            Reservasi ini telah dibatalkan. Anda dapat membuat pesanan sewa baru kapan saja melalui katalog armada.
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Main Detail Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Unit Card -->

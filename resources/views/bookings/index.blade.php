@@ -1,24 +1,38 @@
 @extends('rental-hub::layout')
 
-@section('title', __('rental-hub::rental.bookings_title'))
-@section('page-title', __('rental-hub::rental.bookings_title'))
+@section('title', $isAdmin ? __('rental-hub::rental.admin_bookings_title') : __('rental-hub::rental.my_bookings_title'))
+@section('page-title', $isAdmin ? __('rental-hub::rental.nav_admin_bookings') : __('rental-hub::rental.nav_my_bookings'))
 
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">{{ __('rental-hub::rental.bookings_title') }}</h1>
-            <p class="text-sm text-slate-500 mt-1">{{ __('rental-hub::rental.bookings_subtitle') }}</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                {{ $isAdmin ? __('rental-hub::rental.admin_bookings_title') : __('rental-hub::rental.my_bookings_title') }}
+            </h1>
+            <p class="text-sm text-slate-500 mt-1">
+                {{ $isAdmin ? __('rental-hub::rental.admin_bookings_subtitle') : __('rental-hub::rental.my_bookings_subtitle') }}
+            </p>
         </div>
         <div>
-            <a href="{{ route('rental.bookings.create') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-sm transition-colors min-h-[44px]">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                <span>{{ __('rental-hub::rental.quick_rent_cta') }}</span>
-            </a>
+            @if ($isAdmin)
+                <a href="{{ route('rental.units.index') }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50 shadow-sm transition-colors min-h-[44px]">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                    <span>{{ __('rental-hub::rental.nav_units') }}</span>
+                </a>
+            @else
+                <a href="{{ route('rental.catalog') }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 shadow-sm transition-colors min-h-[44px]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>{{ __('rental-hub::rental.catalog_rent_unit') }}</span>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -29,7 +43,7 @@
                 <input type="text" 
                        name="search" 
                        value="{{ $search ?? '' }}"
-                       placeholder="{{ $isAdmin ? 'Cari kode, nama armada, plat, atau pelanggan...' : 'Cari kode booking atau nama armada...' }}" 
+                       placeholder="{{ $isAdmin ? 'Cari kode booking, nama armada, plat nomor, atau pelanggan...' : 'Cari kode booking atau nama armada Anda...' }}" 
                        class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 shadow-sm min-h-[42px]">
             </div>
 
@@ -113,7 +127,7 @@
                             <td class="px-6 py-4 text-right whitespace-nowrap space-x-2">
                                 <a href="{{ route('rental.bookings.show', $b) }}" 
                                    class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors">
-                                    {{ __('rental-hub::rental.common_details') }}
+                                    {{ $isAdmin ? 'Proses & Detail' : __('rental-hub::rental.common_details') }}
                                 </a>
 
                                 @can('cancel', $b)
@@ -129,7 +143,18 @@
                     @empty
                         <tr>
                             <td colspan="{{ $isAdmin ? 7 : 6 }}" class="px-6 py-12 text-center text-slate-400">
-                                {{ __('rental-hub::rental.common_no_data') }}
+                                @if ($isAdmin)
+                                    <p class="font-medium text-slate-600">Belum ada reservasi sewa dari pelanggan.</p>
+                                    <p class="text-xs text-slate-400 mt-1">Seluruh pesanan sewa pelanggan akan tampil di panel ini.</p>
+                                @else
+                                    <p class="font-medium text-slate-600">Anda belum memiliki riwayat sewa kendaraan.</p>
+                                    <p class="text-xs text-slate-400 mt-1">Pilih kendaraan dari katalog armada kami untuk memulai perjalanan Anda.</p>
+                                    <div class="mt-4">
+                                        <a href="{{ route('rental.catalog') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700">
+                                            Buka Katalog Armada &rarr;
+                                        </a>
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @endforelse

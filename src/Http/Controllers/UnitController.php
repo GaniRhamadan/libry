@@ -40,6 +40,29 @@ class UnitController extends Controller
         ]);
     }
 
+    public function catalog(Request $request): View
+    {
+        $filters = [
+            'search' => $request->query('search'),
+            'category_id' => $request->query('category_id'),
+        ];
+
+        $units = RentalUnit::available()
+            ->with('category')
+            ->filter($filters)
+            ->latest()
+            ->paginate(9)
+            ->withQueryString();
+
+        $categories = RentalCategory::orderBy('name')->get();
+
+        return view('rental-hub::catalog.index', [
+            'units' => $units,
+            'categories' => $categories,
+            'filters' => $filters,
+        ]);
+    }
+
     public function create(): View
     {
         $categories = RentalCategory::orderBy('name')->get();

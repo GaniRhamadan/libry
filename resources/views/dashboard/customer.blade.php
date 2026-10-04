@@ -7,18 +7,29 @@
 <div class="space-y-8">
     <!-- Hero / Quick Rent Banner -->
     <div class="relative overflow-hidden rounded-2xl bg-indigo-600 p-6 sm:p-8 text-white shadow-sm">
-        <div class="relative z-10 max-w-xl">
+        <div class="relative z-10 max-w-2xl">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur text-white mb-3">
+                🚗 Layanan Sewa Kendaraan Terpercaya
+            </span>
             <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Halo, {{ auth()->user()->name }}!</h1>
             <p class="mt-2 text-sm text-indigo-100 leading-relaxed">
-                Butuh kendaraan untuk operasional perjalanan atau liburan keluarga? Armada kami selalu siap melayani Anda dengan tarif transparan dan proses instan.
+                Butuh kendaraan untuk operasional perjalanan, mudik, atau liburan keluarga? Jelajahi armada pilihan kami dengan tarif transparan dan proses sewa instan.
             </p>
-            <div class="mt-5">
-                <a href="{{ route('rental.bookings.create') }}" 
+            <div class="mt-5 flex flex-wrap items-center gap-3">
+                <a href="{{ route('rental.catalog') }}" 
                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-indigo-600 font-bold text-sm shadow hover:bg-indigo-50 transition-colors min-h-[44px]">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    <span>{{ __('rental-hub::rental.nav_catalog') }}</span>
+                </a>
+
+                <a href="{{ route('rental.bookings.create') }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-700/80 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors min-h-[44px]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    <span>{{ __('rental-hub::rental.quick_rent_cta') }}</span>
+                    <span>{{ __('rental-hub::rental.nav_rent_now') }}</span>
                 </a>
             </div>
         </div>
@@ -28,6 +39,60 @@
             </svg>
         </div>
     </div>
+
+    <!-- Available Fleet Preview Section -->
+    @if (isset($availableUnits) && $availableUnits->isNotEmpty())
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Armada Siap Sewa Hari Ini</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Pilihan armada kendaraan dengan performa prima siap langsung digunakan.</p>
+                </div>
+                <a href="{{ route('rental.catalog') }}" class="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+                    Lihat Semua di Katalog &rarr;
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                @foreach ($availableUnits as $unit)
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="relative h-40 w-full bg-slate-100 overflow-hidden">
+                                <img src="{{ $unit->photo_url }}" 
+                                     alt="{{ $unit->name }}" 
+                                     class="w-full h-full object-cover">
+                                <div class="absolute top-2.5 right-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500 text-white shadow-sm">
+                                        Tersedia
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="text-[11px] font-bold text-indigo-600 uppercase tracking-wider mb-0.5">
+                                    {{ $unit->category->name ?? 'Armada' }}
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 truncate">{{ $unit->name }}</h3>
+                                <div class="text-xs font-mono text-slate-400 mt-0.5">{{ $unit->code }}</div>
+
+                                <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                                    <span class="text-slate-500">Tarif per Hari:</span>
+                                    <span class="font-bold text-slate-900">{{ $unit->formatted_price_per_day }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 pt-0">
+                            <a href="{{ route('rental.bookings.create', ['unit_id' => $unit->id]) }}" 
+                               class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white text-xs font-bold transition-colors">
+                                <span>Sewa Armada Ini</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <!-- Active Reservations Section -->
     <div class="space-y-4">
@@ -41,10 +106,10 @@
                     </svg>
                 </div>
                 <p class="text-sm font-semibold text-slate-700">Tidak ada reservasi yang sedang berjalan</p>
-                <p class="text-xs text-slate-500 mt-1">Pilih armada dan tentukan tanggal peminjaman kapan saja.</p>
+                <p class="text-xs text-slate-500 mt-1">Pilih armada favorit Anda di katalog dan ajukan sewa kapan saja.</p>
                 <div class="mt-4">
-                    <a href="{{ route('rental.bookings.create') }}" class="inline-flex items-center text-xs font-semibold text-indigo-600 hover:text-indigo-700">
-                        Pesan Armada Sekarang &rarr;
+                    <a href="{{ route('rental.catalog') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700">
+                        Buka Katalog Armada &rarr;
                     </a>
                 </div>
             </div>
@@ -151,15 +216,15 @@
                             </td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">
                                 <a href="{{ route('rental.bookings.show', $item) }}" 
-                                   class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2 rounded-lg hover:bg-indigo-50 transition-colors">
+                                   class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">
                                     {{ __('rental-hub::rental.common_details') }}
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-slate-400">
-                                Belum ada riwayat booking sebelumnya.
+                            <td colspan="6" class="px-6 py-8 text-center text-slate-400">
+                                Belum ada riwayat pesanan sewa sebelumnya.
                             </td>
                         </tr>
                     @endforelse

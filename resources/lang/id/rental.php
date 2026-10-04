@@ -26,13 +26,27 @@ return [
 
     // Navigation & Common UI
     'nav_dashboard' => 'Dashboard',
-    'nav_units' => 'Armada Kendaraan',
-    'nav_categories' => 'Kategori Armada',
+    'nav_units' => 'Kelola Armada',
+    'nav_categories' => 'Kelola Kategori',
     'nav_bookings' => 'Data Booking',
+    'nav_admin_bookings' => 'Kelola Booking',
+    'nav_my_bookings' => 'Sewa Saya',
+    'nav_catalog' => 'Katalog Armada',
+    'nav_rent_now' => 'Sewa Kendaraan',
     'nav_profile' => 'Profil Saya',
     'nav_logout' => 'Keluar',
     'nav_login' => 'Masuk',
     'nav_register' => 'Daftar Akun',
+
+    // Catalog
+    'catalog_title' => 'Katalog Armada Siap Sewa',
+    'catalog_subtitle' => 'Pilih kendaraan favorit Anda dengan tarif transparan dan performa prima siap pakai.',
+    'catalog_rent_unit' => 'Sewa Armada Ini',
+    'catalog_empty' => 'Saat ini tidak ada unit armada yang tersedia sesuai kriteria pencarian Anda.',
+    'my_bookings_title' => 'Sewa Saya',
+    'my_bookings_subtitle' => 'Pantau status permohonan sewa, jadwal penggunaan armada, dan riwayat pesanan Anda.',
+    'admin_bookings_title' => 'Kelola Booking Pelanggan',
+    'admin_bookings_subtitle' => 'Tinjau permohonan sewa masuk, verifikasi serah terima armada, dan konfirmasi pengembalian unit.',
 
     'common_actions' => 'Aksi',
     'common_details' => 'Detail',

@@ -212,10 +212,11 @@ Seluruh view Blade akan dipublikasikan ke direktori:
 | `POST` | `/rental/logout` | `rental.logout` | Auth | Keluar dari sesi rental |
 | `GET` | `/rental/profile` | `rental.profile.edit` | Auth | Formulir edit profil & sandi |
 | `PUT` | `/rental/profile` | `rental.profile.update` | Auth | Perbarui profil |
-| `GET` | `/rental/dashboard` | `rental.dashboard` | Auth | Dashboard dinamis (Admin / Pelanggan) |
-| `GET` | `/rental/bookings` | `rental.bookings.index` | Auth | Daftar reservasi booking |
-| `GET` | `/rental/bookings/create` | `rental.bookings.create` | Auth | Formulir pemesanan sewa armada |
-| `POST` | `/rental/bookings` | `rental.bookings.store` | Auth | Simpan reservasi sewa baru |
+| `GET` | `/rental/dashboard` | `rental.dashboard` | Auth | Dashboard dinamis peran akun (Admin / Penyewa) |
+| `GET` | `/rental/catalog` | `rental.catalog` | Auth | Katalog armada siap sewa (eksplorasi mobil & motor) |
+| `GET` | `/rental/bookings` | `rental.bookings.index` | Auth | Daftar reservasi (Admin: Kelola Pelanggan / User: Sewa Saya) |
+| `GET` | `/rental/bookings/create` | `rental.bookings.create` | Penyewa | Formulir pemesanan sewa armada |
+| `POST` | `/rental/bookings` | `rental.bookings.store` | Penyewa | Simpan reservasi sewa baru |
 | `GET` | `/rental/bookings/{booking}` | `rental.bookings.show` | Auth | Detail tagihan & status booking |
 | `POST` | `/rental/bookings/{booking}/cancel` | `rental.bookings.cancel` | Auth (Policy) | Batalkan booking (status pending) |
 | `GET` | `/rental/units` | `rental.units.index` | Admin | Daftar dan filter inventaris armada |

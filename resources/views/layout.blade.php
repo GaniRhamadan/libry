@@ -88,7 +88,9 @@
                             </div>
                             <div>
                                 <h1 class="text-base font-bold text-slate-900 leading-tight">{{ __('rental-hub::rental.app_name') }}</h1>
-                                <span class="text-xs text-slate-500">{{ auth()->user()->rental_role === 'admin' ? __('rental-hub::rental.role_admin') : __('rental-hub::rental.role_customer') }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }}">
+                                    {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? '👑 ' . __('rental-hub::rental.role_admin') : '🚗 ' . __('rental-hub::rental.role_customer') }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -109,9 +111,9 @@
                     </div>
                     <div>
                         <div class="text-sm font-bold text-slate-900 leading-tight">{{ __('rental-hub::rental.app_name') }}</div>
-                        <div class="text-xs text-slate-500 font-medium">
-                            {{ auth()->user()->rental_role === 'admin' ? __('rental-hub::rental.role_admin') : __('rental-hub::rental.role_customer') }}
-                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }}">
+                            {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? '👑 ' . __('rental-hub::rental.role_admin') : '🚗 ' . __('rental-hub::rental.role_customer') }}
+                        </span>
                     </div>
                 </div>
                 <div class="flex-1 px-4 py-6 space-y-1">
@@ -159,6 +161,10 @@
                     </div>
 
                     <div class="ml-4 flex items-center md:ml-6 gap-3">
+                        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200' }}">
+                            {{ (auth()->user()->rental_role ?? 'customer') === 'admin' ? '👑 ' . __('rental-hub::rental.role_admin') : '🚗 ' . __('rental-hub::rental.role_customer') }}
+                        </span>
+
                         <a href="{{ route('rental.profile.edit') }}" 
                            class="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-700 hover:text-indigo-600 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
                             <span class="inline-block h-6 w-6 rounded-full bg-slate-200 text-center font-bold text-slate-600 leading-6 text-xs">

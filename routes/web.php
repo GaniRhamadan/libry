@@ -34,6 +34,9 @@ Route::prefix($routePrefix)
             // Shared Dashboard (Determined by Role)
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+            // Fleet Catalog for Renters
+            Route::get('/catalog', [UnitController::class, 'catalog'])->name('catalog');
+
             // Bookings (Customer & Admin)
             Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
             Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
