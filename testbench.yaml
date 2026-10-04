@@ -10,6 +10,6 @@ workbench:
 
 env:
   - DB_CONNECTION=sqlite
-  - DB_DATABASE=/home/gani/library_laravel/database/database.sqlite
+  - DB_DATABASE=database/database.sqlite
   - CACHE_STORE=file
   - SESSION_DRIVER=file

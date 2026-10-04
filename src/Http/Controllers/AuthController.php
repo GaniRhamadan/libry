@@ -70,7 +70,7 @@ class AuthController extends Controller
         $userModel = config('rental-hub.user_model', 'App\\Models\\User');
 
         $user = DB::transaction(function () use ($request, $userModel) {
-            return $userModel::create([
+            return $userModel::forceCreate([
                 'name' => (string) $request->input('name'),
                 'email' => (string) $request->input('email'),
                 'phone' => (string) $request->input('phone'),

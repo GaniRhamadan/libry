@@ -44,6 +44,14 @@ class InstallRentalPackage extends Command
 
         // 2. Jalankan migrasi database
         $this->line('<fg=cyan>Langkah 2:</> Menjalankan migrasi database...');
+        $connection = config('database.default');
+        if ($connection === 'sqlite') {
+            $database = config('database.connections.sqlite.database');
+            if ($database && $database !== ':memory:' && !File::exists($database)) {
+                File::ensureDirectoryExists(dirname($database));
+                File::put($database, '');
+            }
+        }
         $this->call('migrate');
 
         // 3. Storage Symlink
@@ -109,7 +117,7 @@ class InstallRentalPackage extends Command
             $existingUser->save();
             $this->info("Akun {$adminEmail} sudah ada dan perannya telah diperbarui menjadi admin.");
         } else {
-            $userModel::create([
+            $userModel::forceCreate([
                 'name' => $adminName,
                 'email' => $adminEmail,
                 'password' => Hash::make($adminPassword),
